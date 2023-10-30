@@ -80,7 +80,7 @@ CORE_CODE_WHITELIST = {'mikd', 'minm', 'mper', 'miid', 'asal', 'asar', 'ascm', '
                        'asdm', 'asdc', 'asdn', 'aseq', 'asgn', 'asdt', 'asrv', 'assr', 'assz', 'asst', 'assp', 'astm',
                        'astc', 'astn', 'asur', 'asyr', 'asfm', 'asdb', 'asdk', 'asbt', 'agrp', 'ascd', 'ascs', 'asct',
                        'ascn', 'ascr', 'asri', 'asai', 'askd', 'assn', 'assu', 'aeNV', 'aePC', 'aeHV', 'aeMK', 'aeSN',
-                       'aeEN', 'paus', 'pres', 'disc'}
+                       'aeEN', 'paus', 'pres', 'disc', 'conn'}
 
 
 # pylint: disable=R0902, E0602
@@ -222,6 +222,12 @@ class AirplayListener(EventDispatcher):
             elif item.code == "snam":
                 self.client_name = item.data()
 
+                # the device name can be the ANNOUNCE package as well
+                self.connected = True
+                if all(self._has_remote_data):
+                    self._has_remote_data = [False, False]
+            elif item.code == "conn":
+                self.client_name = item.data()
                 # the device name can be the ANNOUNCE package as well
                 self.connected = True
                 if all(self._has_remote_data):

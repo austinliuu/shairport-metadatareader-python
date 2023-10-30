@@ -246,11 +246,15 @@ class AirplayListener(EventDispatcher):
                 #if not (self._tmp_track_info.items() <= self.track_info.items()):
                 self.track_info = self._tmp_track_info
                 self._tmp_track_info = {}
-            elif item.code IN ["pfls", "paus"]:
+            elif item.code == "pfls":
                 self.playback_state = "pause"
                 self._did_receive_progress_msg = False
                 self._did_receive_play_msg = False
-            elif item.code IN ["prsm", "pres"]:
+            elif item.code ==  "paus":
+                self.playback_state = "pause"
+                self._did_receive_progress_msg = False
+                self._did_receive_play_msg = False
+            elif item.code == "prsm":
                 self._did_receive_play_msg = True
                 # workaround for a "bug" inside shairport (see __init__ for details)
                 if self._did_receive_progress_msg:
@@ -258,7 +262,20 @@ class AirplayListener(EventDispatcher):
                     self._did_receive_progress_msg = False
                     self._did_receive_play_msg = False
             # to inaccurate
-            elif item.code IN ["pend", "disc"]:
+            elif item.code == "pres":
+                self._did_receive_play_msg = True
+                # workaround for a "bug" inside shairport (see __init__ for details)
+                if self._did_receive_progress_msg:
+                    self.playback_state = "play"
+                    self._did_receive_progress_msg = False
+                    self._did_receive_play_msg = False
+            elif item.code == "pend":
+                self.playback_state = "stop"
+                #self.track_info = {}
+                self._did_receive_progress_msg = False
+                self._did_receive_play_msg = False
+                self.connected = False
+            elif item.code ==  "disc":
                 self.playback_state = "stop"
                 #self.track_info = {}
                 self._did_receive_progress_msg = False

@@ -227,8 +227,6 @@ class AirplayListener(EventDispatcher):
                 if all(self._has_remote_data):
                     self._has_remote_data = [False, False]
             elif item.code == "conn":
-                self.client_name = item.data()
-                # the device name can be the ANNOUNCE package as well
                 self.connected = True
                 if all(self._has_remote_data):
                     self._has_remote_data = [False, False]

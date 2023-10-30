@@ -80,7 +80,7 @@ CORE_CODE_WHITELIST = {'mikd', 'minm', 'mper', 'miid', 'asal', 'asar', 'ascm', '
                        'asdm', 'asdc', 'asdn', 'aseq', 'asgn', 'asdt', 'asrv', 'assr', 'assz', 'asst', 'assp', 'astm',
                        'astc', 'astn', 'asur', 'asyr', 'asfm', 'asdb', 'asdk', 'asbt', 'agrp', 'ascd', 'ascs', 'asct',
                        'ascn', 'ascr', 'asri', 'asai', 'askd', 'assn', 'assu', 'aeNV', 'aePC', 'aeHV', 'aeMK', 'aeSN',
-                       'aeEN'}
+                       'aeEN', 'paus', 'pres', 'disc'}
 
 
 # pylint: disable=R0902, E0602
@@ -246,11 +246,11 @@ class AirplayListener(EventDispatcher):
                 #if not (self._tmp_track_info.items() <= self.track_info.items()):
                 self.track_info = self._tmp_track_info
                 self._tmp_track_info = {}
-            elif item.code == "pfls":
+            elif item.code IN ("pfls", "paus"):
                 self.playback_state = "pause"
                 self._did_receive_progress_msg = False
                 self._did_receive_play_msg = False
-            elif item.code == "prsm":
+            elif item.code IN ("prsm", "pres"):
                 self._did_receive_play_msg = True
                 # workaround for a "bug" inside shairport (see __init__ for details)
                 if self._did_receive_progress_msg:
@@ -258,7 +258,7 @@ class AirplayListener(EventDispatcher):
                     self._did_receive_progress_msg = False
                     self._did_receive_play_msg = False
             # to inaccurate
-            elif item.code == "pend":
+            elif item.code IN ("pend", "disc"):
                 self.playback_state = "stop"
                 #self.track_info = {}
                 self._did_receive_progress_msg = False
